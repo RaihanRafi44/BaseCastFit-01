@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "376347346511",
+    "project_id": "basecastfit-thesis",
+    "storage_bucket": "basecastfit-thesis.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376347346511:android:8f9d6050fded9fb5bdcc3a",
+        "android_client_info": {
+          "package_name": "com.raihan.basecastfit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgQ3PO7JesU3VKgu616kuLvQOzwuOIWAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

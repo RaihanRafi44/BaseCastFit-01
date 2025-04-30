@@ -44,4 +44,12 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="text_highlight_register">Register</string>
+    <string name="text_error_email_empty">Email should not be empty</string>
+    <string name="text_error_email_invalid">Enter a valid format email</string>
+    <string name="text_error_password_empty">Password should not be empty</string>
+    <string name="text_error_password_less_than_4_char">Password cannot less than 4 character</string>
+    <string name="text_highlight_login_here">Login disini</string>
+    <string name="text_error_name_cannot_empty">Name cannot be empty</string>
+    <string name="text_password_does_not_match">Password doesn\'t match</string>
 </resources>

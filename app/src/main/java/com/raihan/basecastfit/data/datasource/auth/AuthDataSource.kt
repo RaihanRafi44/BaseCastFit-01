@@ -1,5 +1,8 @@
 package com.raihan.basecastfit.data.datasource.auth
 
+import com.raihan.basecastfit.data.model.User
+import com.raihan.basecastfit.data.model.toUser
+import com.raihan.basecastfit.data.source.firebase.FirebaseService
 import kotlin.jvm.Throws
 
 interface AuthDataSource {
@@ -28,8 +31,50 @@ interface AuthDataSource {
 
     fun isLoggedIn(): Boolean
 
-    //fun getCurrentUser(): User?
+    fun getCurrentUser(): User?
 }
 
-class FirebaseAuthDataSource {
+class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSource {
+    override suspend fun doLogin(
+        email: String,
+        password: String,
+    ): Boolean {
+        return service.doLogin(email, password)
+    }
+
+    override suspend fun doRegister(
+        email: String,
+        fullName: String,
+        password: String,
+    ): Boolean {
+        return service.doRegister(email, fullName, password)
+    }
+
+    override suspend fun updateProfile(fullName: String?, photoUrl: String?): Boolean {
+        return service.updateProfile(fullName)
+    }
+
+    override suspend fun updatePassword(newPassword: String): Boolean {
+        return service.updatePassword(newPassword)
+    }
+
+    override suspend fun updateEmail(newEmail: String): Boolean {
+        return service.updateEmail(newEmail)
+    }
+
+    override fun requestChangePasswordByEmail(): Boolean {
+        return service.requestChangePasswordByEmail()
+    }
+
+    override fun doLogout(): Boolean {
+        return service.doLogout()
+    }
+
+    override fun isLoggedIn(): Boolean {
+        return service.isLoggedIn()
+    }
+
+    override fun getCurrentUser(): User? {
+        return service.getCurrentUser().toUser()
+    }
 }

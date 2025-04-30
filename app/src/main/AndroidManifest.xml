@@ -23,13 +23,13 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".presentation.splashscreen.SplashScreenActivity"
+            android:name=".presentation.main.MainActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.recommendation.RecommendationActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name=".presentation.splashscreen.SplashScreenActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -26,5 +26,7 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
         navView.setupWithNavController(navController)
+
+        //throw IllegalAccessException ("Test Crash")
     }
 }
