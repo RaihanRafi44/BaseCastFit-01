@@ -31,4 +31,7 @@ interface UserRepository {
     fun isLoggedIn(): Boolean
 
     fun getCurrentUser(): User?
+
+    fun requestForgotPassword(email: String): Flow<ResultWrapper<Boolean>>
+
 }

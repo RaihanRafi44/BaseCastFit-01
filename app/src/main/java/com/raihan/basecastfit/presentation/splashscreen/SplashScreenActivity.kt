@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.raihan.basecastfit.R
 import com.raihan.basecastfit.databinding.ActivitySplashScreenBinding
+import com.raihan.basecastfit.presentation.login.LoginActivity
 import com.raihan.basecastfit.presentation.main.MainActivity
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -33,9 +34,17 @@ class SplashScreenActivity : AppCompatActivity() {
             if (splashViewModel.isUserLoggedIn()) {
                 navigateToMain()
             } else {
-                navigateToMain()
+                navigateToLogin()
             }
         }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            },
+        )
     }
 
     private fun navigateToMain() {

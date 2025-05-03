@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputLayout
 import com.raihan.basecastfit.R
 import com.raihan.basecastfit.databinding.ActivityLoginBinding
+import com.raihan.basecastfit.presentation.forgotpass.ForgotPassActivity
 import com.raihan.basecastfit.presentation.main.MainActivity
 import com.raihan.basecastfit.presentation.register.RegisterActivity
 import com.raihan.basecastfit.utils.highLightWord
@@ -80,6 +81,10 @@ class LoginActivity : AppCompatActivity() {
         binding.tvNavToRegister.highLightWord(getString(R.string.text_highlight_register)) {
             navigateToRegister()
         }
+
+        binding.layoutLogin.tvForgotPassword.setOnClickListener{
+            navigateToForgotPass()
+        }
     }
 
     private fun navigateToRegister() {
@@ -139,5 +144,13 @@ class LoginActivity : AppCompatActivity() {
             textInputLayout.isErrorEnabled = false
             true
         }
+    }
+
+    private fun navigateToForgotPass() {
+        startActivity(
+            Intent(this, ForgotPassActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

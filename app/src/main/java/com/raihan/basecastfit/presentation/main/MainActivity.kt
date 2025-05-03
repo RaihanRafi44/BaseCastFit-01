@@ -1,32 +1,44 @@
 package com.raihan.basecastfit.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.raihan.basecastfit.R
+import com.raihan.basecastfit.databinding.ActivityMainBinding
+import com.raihan.basecastfit.presentation.login.LoginActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+    private val binding: ActivityMainBinding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+
+    private val mainViewModel: MainViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        setContentView(binding.root)
+        setupBottomNav()
+    }
 
-        val navView = findViewById<BottomNavigationView>(R.id.nav_view)
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
-        val navController = navHostFragment.navController
-        navView.setupWithNavController(navController)
+    private fun setupBottomNav() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        binding.navView.setupWithNavController(navController)
 
-        //throw IllegalAccessException ("Test Crash")
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            Intent(this, LoginActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
     }
 }

@@ -47,10 +47,11 @@
     app:backgroundTintMode="src_in"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
-    android:text="" />
+    android:text=""
+        android:visibility="visible"/>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_back_edit"
+        android:id="@+id/btn_cancel_edit"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="16dp"
@@ -63,7 +64,7 @@
         android:elevation="20dp"
         android:stateListAnimator="@null"
         android:translationZ="4dp"
-        app:icon="@drawable/ic_pencil"
+        app:icon="@drawable/ic_cross"
         app:iconTint="@color/md_theme_scrim"
         app:iconGravity="textStart"
         app:iconPadding="0dp"
@@ -178,6 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    app:indicatorColor="@color/md_theme_primaryFixedDim"
                     android:indeterminate="true"
                     android:layout_marginEnd="4dp"
                     android:visibility="gone" />

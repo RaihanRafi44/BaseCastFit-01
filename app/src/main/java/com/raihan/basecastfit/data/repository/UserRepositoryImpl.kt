@@ -52,4 +52,9 @@ class UserRepositoryImpl(
     override fun getCurrentUser(): User? {
         return dataSource.getCurrentUser()
     }
+
+    override fun requestForgotPassword(email: String): Flow<ResultWrapper<Boolean>> {
+        return proceedFlow { dataSource.requestForgotPassword(email) }
+    }
+
 }

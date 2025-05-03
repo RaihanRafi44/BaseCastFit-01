@@ -52,4 +52,5 @@
     <string name="text_highlight_login_here">Login disini</string>
     <string name="text_error_name_cannot_empty">Name cannot be empty</string>
     <string name="text_password_does_not_match">Password doesn\'t match</string>
+    <string name="text_username_login">Hi %1$s</string>
 </resources>

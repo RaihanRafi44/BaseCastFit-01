@@ -62,4 +62,15 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tv_forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:text="Lupa password"
+        android:textColor="@color/colorOnCustomColor4Container"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </LinearLayout>

@@ -7,6 +7,12 @@ import com.raihan.basecastfit.data.repository.UserRepository
 import com.raihan.basecastfit.data.repository.UserRepositoryImpl
 import com.raihan.basecastfit.data.source.firebase.FirebaseService
 import com.raihan.basecastfit.data.source.firebase.FirebaseServiceImpl
+import com.raihan.basecastfit.presentation.forgotpass.ForgotPassViewModel
+import com.raihan.basecastfit.presentation.home.HomeViewModel
+import com.raihan.basecastfit.presentation.login.LoginViewModel
+import com.raihan.basecastfit.presentation.main.MainViewModel
+import com.raihan.basecastfit.presentation.profile.ProfileViewModel
+import com.raihan.basecastfit.presentation.register.RegisterViewModel
 import com.raihan.basecastfit.presentation.splashscreen.SplashScreenViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.Module
@@ -41,6 +47,12 @@ object AppModules {
     private val viewModel =
         module{
             viewModelOf(::SplashScreenViewModel)
+            viewModelOf(::LoginViewModel)
+            viewModelOf(::RegisterViewModel)
+            viewModelOf(::MainViewModel)
+            viewModelOf(::ProfileViewModel)
+            viewModelOf(::HomeViewModel)
+            viewModelOf(::ForgotPassViewModel)
         }
 
     val modules =

@@ -1,8 +1,10 @@
 package com.raihan.basecastfit.data.datasource.auth
 
+import com.google.firebase.auth.FirebaseAuth
 import com.raihan.basecastfit.data.model.User
 import com.raihan.basecastfit.data.model.toUser
 import com.raihan.basecastfit.data.source.firebase.FirebaseService
+import kotlinx.coroutines.tasks.await
 import kotlin.jvm.Throws
 
 interface AuthDataSource {
@@ -24,6 +26,8 @@ interface AuthDataSource {
     suspend fun updatePassword(newPassword: String): Boolean
 
     suspend fun updateEmail(newEmail: String): Boolean
+
+    suspend fun requestForgotPassword(email: String): Boolean
 
     fun requestChangePasswordByEmail(): Boolean
 
@@ -77,4 +81,10 @@ class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSou
     override fun getCurrentUser(): User? {
         return service.getCurrentUser().toUser()
     }
+
+    override suspend fun requestForgotPassword(email: String): Boolean {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email).await()
+        return true
+    }
+
 }
