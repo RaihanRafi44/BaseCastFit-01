@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseUser
 data class User(
     val id: String,
     val fullName: String,
-    val email: String
+    val email: String,
 )
 
 fun FirebaseUser?.toUser() =

@@ -21,7 +21,7 @@ interface AuthDataSource {
         password: String
     ): Boolean
 
-    suspend fun updateProfile(fullName: String? = null, photoUrl: String? = null): Boolean
+    suspend fun updateProfile(fullName: String? = null): Boolean
 
     suspend fun updatePassword(newPassword: String): Boolean
 
@@ -54,7 +54,7 @@ class FirebaseAuthDataSource(private val service: FirebaseService) : AuthDataSou
         return service.doRegister(email, fullName, password)
     }
 
-    override suspend fun updateProfile(fullName: String?, photoUrl: String?): Boolean {
+    override suspend fun updateProfile(fullName: String?): Boolean {
         return service.updateProfile(fullName)
     }
 

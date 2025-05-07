@@ -33,12 +33,4 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setupWithNavController(navController)
 
     }
-
-    private fun navigateToLogin() {
-        startActivity(
-            Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
-    }
 }

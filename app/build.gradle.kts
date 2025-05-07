@@ -44,6 +44,33 @@ android {
         //noinspection DataBindingWithoutKapt
         dataBinding = true
     }
+    flavorDimensions += "env"
+    productFlavors {
+        create("production"){
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = "\"https://api.weatherapi.com/v1/\""
+            )
+            buildConfigField(
+                type = "String",
+                name = "API_KEY",
+                value = "\"7b2eab38c48e496dbb0142319251702\"",
+            )
+        }
+        create("integration") {
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = "\"https://api.weatherapi.com/v1/\"",
+            )
+            buildConfigField(
+                type = "String",
+                name = "API_KEY",
+                value = "\"7b2eab38c48e496dbb0142319251702\"",
+            )
+        }
+    }
     packagingOptions {
         exclude("META-INF/LICENSE.md")
         exclude("META-INF/LICENSE-notice.md")

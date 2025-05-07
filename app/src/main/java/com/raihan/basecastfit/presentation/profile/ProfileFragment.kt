@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -26,41 +27,81 @@ class ProfileFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?,
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showUserData()
+        profileViewModel.loadCurrentUser()
+        profileViewModel.resetEditMode()
+        observeEditMode()
+        setupInputListeners()
+        setupClickListeners()
+    }
+
+    private fun setupInputListeners() {
         binding.layoutProfile.etEmail.isFocusable = false
-        binding.layoutProfile.etEmail.isClickable = true // agar bisa disentuh untuk trigger Toast
+        binding.layoutProfile.etEmail.isClickable = true
         binding.layoutProfile.etEmail.setOnClickListener {
             Toast.makeText(requireContext(), "Email tidak dapat diubah", Toast.LENGTH_SHORT).show()
         }
-        setClickListeners()
-        observeEditMode()
+
         binding.layoutProfile.etName.addTextChangedListener {
             isSaveProfileButtonEnabled = true
             updateSaveButtonState()
         }
 
-    }
+        profileViewModel.editedFullName.observe(viewLifecycleOwner) {
+            binding.layoutProfile.etName.setText(it)
+        }
 
-    private fun showUserData() {
         profileViewModel.getCurrentUser()?.let {
-            binding.layoutProfile.etName.setText(it.fullName)
             binding.layoutProfile.etEmail.setText(it.email)
-            updateSaveButtonState()
         }
     }
 
-    private fun updateSaveButtonState() {
-        binding.layoutProfile.btnSave.isEnabled = isSaveProfileButtonEnabled
+    private fun observeEditMode() {
+        profileViewModel.isEditMode.observe(viewLifecycleOwner) { isEdit ->
+            binding.layoutProfile.etName.isEnabled = isEdit
+            binding.layoutProfile.etEmail.isEnabled = isEdit
+
+            binding.layoutProfile.btnEditProfile.isVisible = !isEdit
+            binding.layoutProfile.btnCancelEdit.isVisible = isEdit
+            binding.layoutProfile.llChangePassSave.isVisible = isEdit
+            binding.layoutProfile.flBtnLogout.isVisible = !isEdit
+        }
+    }
+
+    private fun setupClickListeners() {
+        binding.layoutProfile.btnLogout.setOnClickListener { showLogoutConfirmationDialog() }
+        binding.layoutProfile.btnEditProfile.setOnClickListener { enterEditMode() }
+        binding.layoutProfile.btnCancelEdit.setOnClickListener { exitEditMode() }
+        binding.layoutProfile.btnSave.setOnClickListener { doEditProfile() }
+        binding.layoutProfile.btnChangePass.setOnClickListener { requestChangePassword() }
+    }
+
+    private fun enterEditMode() {
+        profileViewModel.changeEditMode()
+        binding.layoutProfile.btnEditProfile.visibility = View.GONE
+        binding.layoutProfile.btnCancelEdit.visibility = View.VISIBLE
+        binding.layoutProfile.llChangePassSave.visibility = View.VISIBLE
+        binding.layoutProfile.flBtnLogout.visibility = View.GONE
+    }
+
+    private fun exitEditMode() {
+        profileViewModel.changeEditMode(isCancel = true)
+
+        // Kembalikan teks ke nilai sebelumnya
+        binding.layoutProfile.etName.setText(profileViewModel.editedFullName.value)
+
+        binding.layoutProfile.btnEditProfile.visibility = View.VISIBLE
+        binding.layoutProfile.btnCancelEdit.visibility = View.GONE
+        binding.layoutProfile.llChangePassSave.visibility = View.GONE
+        binding.layoutProfile.flBtnLogout.visibility = View.VISIBLE
+
+        isSaveProfileButtonEnabled = false
+        updateSaveButtonState()
     }
 
     private fun doEditProfile() {
@@ -70,118 +111,33 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun observeEditMode() {
-        profileViewModel.isEditMode.observe(viewLifecycleOwner) {
-            binding.layoutProfile.etName.isEnabled = it
-            binding.layoutProfile.etEmail.isEnabled = it
-        }
-    }
-
-    private fun setClickListeners(){
-        binding.layoutProfile.btnLogout.setOnClickListener {
-            showLogoutConfirmationDialog()
-        }
-
-        binding.layoutProfile.btnEditProfile.setOnClickListener {
-            enterEditMode()
-        }
-
-        binding.layoutProfile.btnCancelEdit.setOnClickListener {
-            exitEditMode()
-        }
-
-        binding.layoutProfile.btnSave.setOnClickListener {
-            doEditProfile()
-        }
-
-        binding.layoutProfile.btnChangePass.setOnClickListener {
-            requestChangePassword()
-        }
-    }
-
-    private fun enterEditMode() {
-        profileViewModel.changeEditMode()
-
-        binding.layoutProfile.btnEditProfile.visibility = View.GONE
-        binding.layoutProfile.btnCancelEdit.visibility = View.VISIBLE
-        binding.layoutProfile.llChangePassSave.visibility = View.VISIBLE
-        binding.layoutProfile.flBtnLogout.visibility = View.GONE
-    }
-
-    private fun exitEditMode() {
-        profileViewModel.changeEditMode()
-
-        binding.layoutProfile.btnEditProfile.visibility = View.VISIBLE
-        binding.layoutProfile.btnCancelEdit.visibility = View.GONE
-        binding.layoutProfile.llChangePassSave.visibility = View.GONE
-        binding.layoutProfile.flBtnLogout.visibility = View.VISIBLE
-    }
-
-
-
     private fun proceedEdit(fullName: String) {
-        profileViewModel.updateProfileName(fullName = fullName).observe(viewLifecycleOwner) {
-            it.proceedWhen(
-                doOnSuccess = {
-                    binding.layoutProfile.pbLoadingSave.isVisible = false
-                    binding.layoutProfile.btnSave.isVisible = true // Make button visible again
-                    isSaveProfileButtonEnabled = false // Disable saving again until a new edit happens
-                    updateSaveButtonState()
-                    Toast.makeText(requireContext(), "Pengubahan data profil sukses", Toast.LENGTH_SHORT).show()
-                },
-                doOnError = {
-                    binding.layoutProfile.pbLoadingSave.isVisible = false
-                    binding.layoutProfile.btnSave.isVisible = true
-                    Toast.makeText(requireContext(), "Pengubahan data profil gagal", Toast.LENGTH_SHORT).show()
-                },
-                doOnLoading = {
-                    binding.layoutProfile.pbLoadingSave.isVisible = true
-                    binding.layoutProfile.btnSave.isVisible = false
-                },
-            )
-        }
+        profileViewModel.updateProfileName(fullName = fullName)
+            .observe(viewLifecycleOwner) {
+                it.proceedWhen(
+                    doOnSuccess = {
+                        binding.layoutProfile.pbLoadingSave.isVisible = false
+                        binding.layoutProfile.btnSave.isVisible = true
+                        isSaveProfileButtonEnabled = false
+                        updateSaveButtonState()
+                        Toast.makeText(requireContext(), "Pengubahan data profil sukses", Toast.LENGTH_SHORT).show()
+                        profileViewModel.loadCurrentUser() // refresh nama terbaru
+                    },
+                    doOnError = {
+                        binding.layoutProfile.pbLoadingSave.isVisible = false
+                        binding.layoutProfile.btnSave.isVisible = true
+                        Toast.makeText(requireContext(), "Pengubahan data profil gagal", Toast.LENGTH_SHORT).show()
+                    },
+                    doOnLoading = {
+                        binding.layoutProfile.pbLoadingSave.isVisible = true
+                        binding.layoutProfile.btnSave.isVisible = false
+                    }
+                )
+            }
     }
 
-    private fun requestChangePassword() {
-        profileViewModel.createChangePwdRequest()
-        val dialog =
-            buildChangePasswordDialog(
-                "Reset password akan dikirimkan ke email ${profileViewModel.getCurrentUser()?.email}. Harap periksa inbox atau folder spam anda.",
-            )
-        dialog.show()
-    }
-
-    private fun buildChangePasswordDialog(message: String): AlertDialog {
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setMessage(message)
-        dialogBuilder.setPositiveButton(
-            "Oke",
-        ) { dialog, id ->
-            // Dismiss dialog on button click
-        }
-        return dialogBuilder.create()
-    }
-
-    private fun showLogoutConfirmationDialog() {
-        val confirmationDialog = buildConfirmationDialog()
-        confirmationDialog.show()
-    }
-
-    private fun buildConfirmationDialog(): AlertDialog {
-        val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setMessage("Apakah kamu ingin logout?")
-        dialogBuilder.setPositiveButton(
-            "Ya",
-        ) { dialog, id ->
-            performLogout()
-            navigateToMenu()
-        }
-        dialogBuilder.setNegativeButton(
-            "Tidak",
-        ) { dialog, id ->
-            // Do nothing, user cancels logout
-        }
-        return dialogBuilder.create()
+    private fun updateSaveButtonState() {
+        binding.layoutProfile.btnSave.isEnabled = isSaveProfileButtonEnabled
     }
 
     private fun checkNameValidation(): Boolean {
@@ -196,12 +152,29 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun performLogout() {
-        profileViewModel.doLogout()
+    private fun requestChangePassword() {
+        profileViewModel.createChangePwdRequest()
+        val dialog = buildChangePasswordDialog(
+            "Reset password akan dikirimkan ke email ${profileViewModel.getCurrentUser()?.email}. Harap periksa inbox atau folder spam anda."
+        )
+        dialog.show()
     }
 
-    private fun navigateToMenu() {
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
+    private fun buildChangePasswordDialog(message: String): AlertDialog {
+        return AlertDialog.Builder(requireContext())
+            .setMessage(message)
+            .setPositiveButton("Oke", null)
+            .create()
     }
 
+    private fun showLogoutConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setMessage("Apakah kamu ingin logout?")
+            .setPositiveButton("Ya") { _, _ ->
+                profileViewModel.doLogout()
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+            }
+            .setNegativeButton("Tidak", null)
+            .show()
+    }
 }
