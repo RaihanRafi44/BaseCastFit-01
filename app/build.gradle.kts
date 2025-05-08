@@ -135,4 +135,7 @@ dependencies {
     testImplementation(libs.coroutine.test)
     testImplementation(libs.turbine)
     testImplementation(libs.core.testing)
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

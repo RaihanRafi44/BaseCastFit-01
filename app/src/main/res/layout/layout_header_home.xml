@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="4dp"
+        android:paddingVertical="10dp"
         android:gravity="center_vertical">
 
         <TextView
@@ -28,17 +28,7 @@
         android:ellipsize="end"
         android:maxLines="1"/>
 
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/foto_saya"
-            android:layout_marginStart="8dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/circle_background"
-            android:cropToPadding="true"
-            android:clipToOutline="true"
-            tools:ignore="UnusedAttribute" />
+
 
 
     </LinearLayout>

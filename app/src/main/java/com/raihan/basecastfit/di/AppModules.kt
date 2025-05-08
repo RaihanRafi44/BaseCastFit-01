@@ -3,6 +3,8 @@ package com.raihan.basecastfit.di
 import com.google.firebase.auth.FirebaseAuth
 import com.raihan.basecastfit.data.datasource.auth.AuthDataSource
 import com.raihan.basecastfit.data.datasource.auth.FirebaseAuthDataSource
+import com.raihan.basecastfit.data.datasource.location.LocationDataSource
+import com.raihan.basecastfit.data.repository.LocationRepository
 import com.raihan.basecastfit.data.repository.UserRepository
 import com.raihan.basecastfit.data.repository.UserRepositoryImpl
 import com.raihan.basecastfit.data.source.firebase.FirebaseService
@@ -31,17 +33,19 @@ object AppModules {
 
     private val localModule =
         module{
-
+            single { com.google.gson.Gson() }
         }
 
     private val dataSource =
         module{
             single<AuthDataSource> { FirebaseAuthDataSource(get()) }
+            single<LocationDataSource> { LocationDataSource(get(), get())}
         }
 
     private val repository =
         module{
             single<UserRepository> { UserRepositoryImpl(get()) }
+            single<LocationRepository> { LocationRepository(get()) }
         }
 
     private val viewModel =
