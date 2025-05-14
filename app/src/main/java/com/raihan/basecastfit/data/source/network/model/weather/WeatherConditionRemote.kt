@@ -4,6 +4,6 @@ import androidx.annotation.Keep
 
 @Keep
 data class WeatherConditionRemote(
-    val icon: String,
-    val text: String
+    val icon: String?,
+    val text: String?
 )

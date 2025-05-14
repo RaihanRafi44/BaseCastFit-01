@@ -59,6 +59,15 @@ class HomeFragment : Fragment() {
         showUserData()
         observeCurrentLocation()
         homeViewModel.loadSavedLocation()
+        observeWeather()
+        /*binding.swipeRefreshLayout.setOnRefreshListener {
+            if (!binding.swipeRefreshLayout.isRefreshing) {
+                binding.swipeRefreshLayout.isRefreshing = true
+            }
+            proceedWithCurrentLocation()
+        }*/
+        binding.swipeRefreshLayout.isEnabled = false
+
     }
 
     private fun showUserData() {
@@ -77,11 +86,21 @@ class HomeFragment : Fragment() {
                 uiState.currentLocation != null -> {
                     val locationName = uiState.currentLocation.location
                     binding.homeWeather.textCurrentLocation.text = locationName
+                    binding.homeWeather.textCurrentDayDate.text = uiState.currentLocation.date
+                    // 👉 Tambahkan Toast koordinat di sini
+                    val lat = uiState.currentLocation.latitude
+                    val lon = uiState.currentLocation.longitude
+                    /*Toast.makeText(
+                        requireContext(),
+                        "Koordinat dari Geocoder:\nLon: $lon",
+                        Toast.LENGTH_LONG
+                    ).show()*/
                 }
             }
         }
 
         binding.btnCurrentLocation.setOnClickListener {
+            binding.swipeRefreshLayout.isRefreshing = true
             proceedWithCurrentLocation()
         }
     }
@@ -109,5 +128,16 @@ class HomeFragment : Fragment() {
         }
     }
 
-
+    private fun observeWeather() {
+        homeViewModel.weather.observe(viewLifecycleOwner) { weather ->
+            weather?.data?.current?.let { currentWeather ->
+                binding.homeWeather.textTemperatureHome.text = "${currentWeather.temperature}°C"
+                binding.homeWeather.textWeatherStatusHome.text = currentWeather.condition.text
+                binding.homeWeather.textWindValue.text = "${currentWeather.wind} km/jam"
+                binding.homeWeather.textRainValue.text = "${currentWeather.precipitation} mm"
+                binding.homeWeather.imageWeatherIcon.load("https:${currentWeather.condition.icon}")
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
 }

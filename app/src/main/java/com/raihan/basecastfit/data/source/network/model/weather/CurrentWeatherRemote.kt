@@ -6,12 +6,12 @@ import com.google.gson.annotations.SerializedName
 @Keep
 data class CurrentWeatherRemote(
     @SerializedName("temp_c")
-    val temperature: Float,
+    val temperature: Float?,
     @SerializedName("condition")
-    val condition: WeatherConditionRemote,
+    val condition: WeatherConditionRemote?,
     @SerializedName("wind_kph")
-    val wind: Float,
+    val wind: Float?,
     @SerializedName("precip_mm")
-    val precipitation: Float,
+    val precipitation: Float?,
 
 )

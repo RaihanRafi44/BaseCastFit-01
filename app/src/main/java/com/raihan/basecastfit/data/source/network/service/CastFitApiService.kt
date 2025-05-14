@@ -2,6 +2,7 @@ package com.raihan.basecastfit.data.source.network.service
 
 import com.raihan.basecastfit.BuildConfig
 import com.raihan.basecastfit.BuildConfig.API_KEY
+import com.raihan.basecastfit.data.source.network.model.weather.WeatherData
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,17 +12,11 @@ import java.util.concurrent.TimeUnit
 
 interface CastFitApiService {
 
-    @GET("search.json")
-    suspend fun searchLocation(
-        @Query("key") key: String = API_KEY,
-        @Query("q") query: String
-    )
-
     @GET("forecast.json")
     suspend fun getWeatherData(
         @Query("key") key: String = API_KEY,
         @Query("q") query: String
-    )
+    ): WeatherData
 
     companion object {
         @JvmStatic
@@ -38,8 +33,6 @@ interface CastFitApiService {
                     .client(okHttpClient)
                     .build()
             return retrofit.create(CastFitApiService::class.java)
-
         }
-
     }
 }

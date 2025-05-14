@@ -4,6 +4,6 @@ import androidx.annotation.Keep
 
 @Keep
 data class WeatherData(
-    val current: CurrentWeatherRemote,
-    val forecast: ForecastRemote
+    val location: LocationRemote?,
+    val current: CurrentWeatherRemote?,
 )

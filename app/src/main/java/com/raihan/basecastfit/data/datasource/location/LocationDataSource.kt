@@ -74,7 +74,8 @@ class LocationDataSource (context: Context, private val gson: Gson) {
     }
 
     private fun getCurrentDate(): String {
-        val formatter = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
-        return "Today, ${formatter.format(Date())}"
+        val locale = Locale("id", "ID")
+        val formatter = SimpleDateFormat("dd MMMM yyyy", locale)
+        return formatter.format(Date())
     }
 }
