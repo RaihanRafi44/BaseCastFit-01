@@ -92,38 +92,6 @@
             android:paddingVertical="12dp"
             app:cornerRadius="12dp"/>
 
-
-        <!--<TextView
-            android:id="@+id/text_title_article"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Article"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_schedule_home"
-            android:layout_marginHorizontal="20dp"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            />-->
-
-        <!--<FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/text_title_article">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_article_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintVertical_bias="0.0"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:listitem="@layout/layout_article_home"
-                app:spanCount="2"/>
-
-        </FrameLayout>-->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -1,11 +1,14 @@
 package com.raihan.basecastfit.presentation.profile
 
+import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -16,11 +19,13 @@ import com.raihan.basecastfit.databinding.FragmentProfileBinding
 import com.raihan.basecastfit.presentation.login.LoginActivity
 import com.raihan.basecastfit.utils.proceedWhen
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Calendar
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val profileViewModel: ProfileViewModel by viewModel()
     private var isSaveProfileButtonEnabled: Boolean = false
+    private var dateOfBirthClickListener: View.OnClickListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +92,14 @@ class ProfileFragment : Fragment() {
         binding.layoutProfile.btnCancelEdit.visibility = View.VISIBLE
         binding.layoutProfile.llChangePassSave.visibility = View.VISIBLE
         binding.layoutProfile.flBtnLogout.visibility = View.GONE
+
+        // Tambahkan listener untuk membuka DatePicker
+        dateOfBirthClickListener = View.OnClickListener {
+            showDatePickerDialog { selectedDate ->
+                binding.layoutProfile.etDateOfBirth.setText(selectedDate)
+            }
+        }
+        binding.layoutProfile.etDateOfBirth.setOnClickListener(dateOfBirthClickListener)
     }
 
     private fun exitEditMode() {
@@ -102,6 +115,10 @@ class ProfileFragment : Fragment() {
 
         isSaveProfileButtonEnabled = false
         updateSaveButtonState()
+
+        // Hapus listener agar tidak bisa dibuka saat bukan edit mode
+        binding.layoutProfile.etDateOfBirth.setOnClickListener(null)
+        dateOfBirthClickListener = null
     }
 
     private fun doEditProfile() {
@@ -176,5 +193,34 @@ class ProfileFragment : Fragment() {
             }
             .setNegativeButton("Tidak", null)
             .show()
+    }
+
+    @SuppressLint("DefaultLocale")
+    private fun showDatePickerDialog(onDateSet: (String) -> Unit) {
+        val context = binding.root.context
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog =
+            DatePickerDialog(
+                context,
+                { _: DatePicker, selectedYear: Int, selectedMonth: Int, selectedDay: Int ->
+                    val formattedDate =
+                        String.format(
+                            "%02d/%02d/%04d",
+                            selectedDay,
+                            selectedMonth + 1,
+                            selectedYear,
+                        )
+                    onDateSet(formattedDate)
+                },
+                year,
+                month,
+                day,
+            )
+
+        datePickerDialog.show()
     }
 }

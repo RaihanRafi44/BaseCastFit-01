@@ -60,12 +60,6 @@ class HomeFragment : Fragment() {
         observeCurrentLocation()
         homeViewModel.loadSavedLocation()
         observeWeather()
-        /*binding.swipeRefreshLayout.setOnRefreshListener {
-            if (!binding.swipeRefreshLayout.isRefreshing) {
-                binding.swipeRefreshLayout.isRefreshing = true
-            }
-            proceedWithCurrentLocation()
-        }*/
         binding.swipeRefreshLayout.isEnabled = false
 
     }
@@ -87,14 +81,6 @@ class HomeFragment : Fragment() {
                     val locationName = uiState.currentLocation.location
                     binding.homeWeather.textCurrentLocation.text = locationName
                     binding.homeWeather.textCurrentDayDate.text = uiState.currentLocation.date
-                    // 👉 Tambahkan Toast koordinat di sini
-                    val lat = uiState.currentLocation.latitude
-                    val lon = uiState.currentLocation.longitude
-                    /*Toast.makeText(
-                        requireContext(),
-                        "Koordinat dari Geocoder:\nLon: $lon",
-                        Toast.LENGTH_LONG
-                    ).show()*/
                 }
             }
         }

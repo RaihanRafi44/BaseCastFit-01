@@ -39,8 +39,3 @@ fun WeatherConditionRemote?.toWeatherCondition() =
         text = this?.text.orEmpty(),
         icon = this?.icon.orEmpty()
     )
-
-/*fun Collection<WeatherData>?.toWeathers() =
-    this?.map {
-        it.toWeather()
-    }*/

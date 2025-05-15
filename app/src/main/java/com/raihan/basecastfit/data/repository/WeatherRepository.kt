@@ -16,19 +16,6 @@ interface WeatherRepository {
     ) : Flow<ResultWrapper<Weather>>
 }
 
-/*
-class WeatherRepositoryImpl(private val dataSource: WeatherDataSource) : WeatherRepository {
-    override fun getWeathers(
-        key: String,
-        query: String
-    ): Flow<ResultWrapper<Weather>> {
-        return proceedFlow {
-            val response = dataSource.getWeatherData(key, query)
-            response.toWeather()
-        }
-    }
-}*/
-
 class WeatherRepositoryImpl(private val dataSource: WeatherDataSource) : WeatherRepository {
     override fun getWeathers(query: String): Flow<ResultWrapper<Weather>> {
         return proceedFlow {

@@ -55,34 +55,6 @@ class HomeViewModel(
         emitUiState(currentLocation = savedLocation)
     }
 
-    /*fun fetchWeatherWithLocation(
-        fusedLocationProviderClient: FusedLocationProviderClient,
-        geocoder: Geocoder,
-        onResult: (String, Double, Double) -> Unit
-    ) {
-        locationRepository.getCurrentLocation(
-            fusedLocationProviderClient = fusedLocationProviderClient,
-            onSuccess = { location ->
-                viewModelScope.launch(Dispatchers.IO) {
-                    val resolved = locationRepository.updateAddress(location, geocoder)
-                    locationRepository.saveLocation(resolved)
-
-                    val lat = resolved.latitude
-                    val lon = resolved.longitude
-
-                    if (lat != null && lon != null) {
-                        val coordinateQuery = "$lat,$lon"
-                        onResult(coordinateQuery, lat, lon)
-                    }
-                    emitUiState(currentLocation = resolved)
-                }
-            },
-            onFailure = {
-                emitUiState(error = "Failed to get location")
-            }
-        )
-    }*/
-
     private fun fetchWeather(lat: Double?, lon: Double?) {
         if (lat == null || lon == null) return
         viewModelScope.launch {
